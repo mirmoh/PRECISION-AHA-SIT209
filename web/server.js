@@ -1,4 +1,5 @@
-const express = require('express');
+const express    = require('express');
+
 const app = express();
 const port = 3006;
 const base = `${__dirname}/public`;
@@ -8,16 +9,20 @@ app.use(express.static('public'));
 
 //Add a route middleware for the root URI path
 app.get('/', function (req, res) {
-    res.sendFile(`${base}/404.html`);
-  });
+  res.sendFile(`${base}/device-list.html`);
+});
 
 app.get('/register', (req, res) => {
     res.sendFile(`${base}/register.html`);
   });
   
-app.get('/iot-applications', (req, res) => {
-    res.sendFile(`${base}/iot-applications.html`);
-  });
+app.get('/signup', (req, res) => {
+    res.sendFile(`${base}/signup.html`);
+  }); 
+
+app.get('/login', (req, res) => {
+  res.sendFile(`${base}/login.html`);
+});
 
 //start the web server and listen to requests on the specified port
 app.listen(port, () => {

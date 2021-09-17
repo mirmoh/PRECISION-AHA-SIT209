@@ -16,7 +16,7 @@
         display: flex;
         flex-direction: column;
       }
-      footer{
+      #footer{
         margin-top: auto;
         background-color: lightgrey;
         text-align: center;
@@ -46,14 +46,7 @@
         </div>
       </div>
 
-      <footer>
-        <p id="footer" ></p>
-        <script>
-          let d = new Date();
-          let n = d.getFullYear();
-          document.getElementById("footer").innerHTML = `Copyright Precision A.H.A ${n}.`;
-        </script>
-      </footer>
+      <div id="footer"></div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="app.js"></script>

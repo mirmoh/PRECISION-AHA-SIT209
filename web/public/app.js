@@ -1,21 +1,78 @@
 $('#navbar').load('navbar.html');
+$('#footer').load('footer.html');
 
-  const devices = JSON.parse(localStorage.getItem('devices')) || []; //convert the string into an array of JSON objects
+const API_URL = 'http://localhost:5006/api';
 
-  devices.forEach(function(device) {
-    $('#devices tbody').append(`
-      <tr>
-        <td>${device.user}</td>
-        <td>${device.name}</td>
-      </tr>`
-    );
+$.get(`${API_URL}/devices`)
+  .then(response => {
+    response.forEach(device => {
+      $('#devices tbody').append(`
+        <tr>
+          <td>${device.user}</td>
+          <td>${device.name}</td>
+        </tr>`
+      );
+    });
+  })
+  .catch(error => {
+    console.error(`Error: ${error}`);
   });
 
-    //add the device to the list of devices
-    $('#add-device').on('click', function() {
-        const user = $('#user').val();
-        const name = $('#name').val();
-        devices.push({ user, name});
-        localStorage.setItem('devices', JSON.stringify(devices)); //add or update the localStorage value for devices with a string-version of the devices array
-        location.href = '/';
-      });
+// add the device to the list of devices  
+$('#add-device').on('click', () => {
+  const name = $('#name').val();
+  const user = $('#user').val();
+  const sensorData = [];
+
+  const body = {
+    name,
+    user,
+    sensorData
+  };
+
+  $.post(`${API_URL}/devices`, body)
+  .then(response => {
+    location.href = '/';
+  })
+  .catch(error => {
+    console.error(`Error: ${error}`);
+  });
+});
+
+$('#add-user').on('click', () => {
+  const email    = $('#email').val();
+  const password = $('#pass').val();
+  const phone    = $('#phone').val();
+  
+  const body = {
+    email,
+    phone,
+    password
+  };
+
+  $.post(`${API_URL}/users`, body)
+  .then(response => {
+    location.href = '/';
+  })
+  .catch(error => {
+    console.error(`Error: ${error}`);
+  });
+});
+
+$('#login').on('click', () => {
+  const username  = $('#username').val();
+  const password  = $('#pass').val();
+  
+  const body = {
+    username,
+    password
+  };
+
+  $.post(`${API_URL}/users`, body)
+  .then(response => {
+    location.href = '/register';
+  })
+  .catch(error => {
+    console.error(`Error: ${error}`);
+  });
+});
