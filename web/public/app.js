@@ -1,7 +1,7 @@
 $('#navbar').load('navbar.html');
 $('#footer').load('footer.html');
 
-const API_URL = 'http://localhost:5006/api';
+const API_URL = 'http://localhost:5007/api';
 
 $.get(`${API_URL}/devices`)
   .then(response => {
@@ -52,7 +52,7 @@ $('#add-user').on('click', () => {
 
   $.post(`${API_URL}/users`, body)
   .then(response => {
-    location.href = '/';
+    location.href = '/login';
   })
   .catch(error => {
     console.error(`Error: ${error}`);

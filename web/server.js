@@ -1,7 +1,7 @@
 const express    = require('express');
 
 const app = express();
-const port = 3006;
+const port = 3007;
 const base = `${__dirname}/public`;
 
 //Specify middleware to server static files from the /public directory

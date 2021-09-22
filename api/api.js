@@ -1,4 +1,4 @@
-const port = 5006;
+const port = 5007;
 const base = `${__dirname}/public`;
 
 const express    = require('express')
@@ -7,7 +7,7 @@ const morgan     = require('morgan')
 const bodyParser = require('body-parser')
 const bcrypt = require('bcryptjs')
 const jwt    = require('jsonwebtoken')
-const authRoute  = require('./routes/auth')
+// const authRoute  = require('./routes/auth')
 
 mongoose.connect('mongodb+srv://toanchungg:dunglinh19@cluster0.ag3kk.mongodb.net/mydb0', 
 {useNewUrlParser: true, useUnifiedTopology: true });
@@ -55,7 +55,7 @@ app.get('/api/devices', (req, res) => {
 });
 
 //login
-app.post('/api/users', (req, res) => {
+app.post('/api/users/login', (req, res) => {
     const { username, password } = req.body;
 
     User.findOne({$or: [{email: username}, {phone: username}]})
@@ -83,7 +83,7 @@ app.post('/api/users', (req, res) => {
         } 
         else {
             res.json({
-                message: 'No user found!'
+                message: 'No user found?!'
             })
         }
     })
@@ -126,4 +126,4 @@ app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });
 
-app.use('/api', authRoute);
+// app.use('/api', authRoute);
