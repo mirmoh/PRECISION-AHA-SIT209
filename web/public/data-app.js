@@ -37,6 +37,7 @@ async function chartIt() {
 
 //get data
 async function getData() {
+    getDevice();
     const xtimes = [];
     const ysoils = [];
 
@@ -55,4 +56,27 @@ async function getData() {
     })
 
     return { xtimes, ysoils };
+}
+
+//display device
+async function getDevice() {
+  await $.get(`${API_URL}/devices`)
+  .then(response => {
+    response.forEach(device => {
+      $('#devices tbody').append(`
+        <tr>
+          <td>${device.user}</td>
+          <td>${device.name}</td>
+          <td><button class="editbtn">enter</button></td>
+        </tr>`
+      );
+    });
+    $('.editbtn').click(function(){
+        $(this).html($(this).html() == 'enter' ? 'chosen' : 'enter');
+        return device.name;
+    });
+  })
+  .catch(error => {
+    console.error(`Error: ${error}`);
+  });
 }
