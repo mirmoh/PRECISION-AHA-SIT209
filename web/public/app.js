@@ -3,6 +3,7 @@ $('#footer').load('footer.html');
 
 const API_URL = 'http://localhost:5007/api';
 
+//display device
 $.get(`${API_URL}/devices`)
   .then(response => {
     response.forEach(device => {
@@ -18,7 +19,7 @@ $.get(`${API_URL}/devices`)
     console.error(`Error: ${error}`);
   });
 
-// add the device to the list of devices  
+//add device  
 $('#add-device').on('click', () => {
   const name = $('#name').val();
   const user = $('#user').val();
@@ -39,6 +40,7 @@ $('#add-device').on('click', () => {
   });
 });
 
+//sign in
 $('#add-user').on('click', () => {
   const email    = $('#email').val();
   const password = $('#pass').val();
@@ -59,6 +61,7 @@ $('#add-user').on('click', () => {
   });
 });
 
+//not working
 $('#login').on('click', () => {
   const username  = $('#username').val();
   const password  = $('#pass').val();

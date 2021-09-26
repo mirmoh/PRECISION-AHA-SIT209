@@ -24,6 +24,10 @@ app.get('/login', (req, res) => {
   res.sendFile(`${base}/login.html`);
 });
 
+app.get('/device-data', (req, res) => {
+  res.sendFile(`${base}/device-data.html`);
+});
+
 //start the web server and listen to requests on the specified port
 app.listen(port, () => {
     console.log(`listening on port ${port}`);

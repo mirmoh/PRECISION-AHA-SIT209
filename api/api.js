@@ -46,6 +46,7 @@ app.post('/api/devices', (req, res) => {
     });
 });
 
+//device-list
 app.get('/api/devices', (req, res) => {
     Device.find({}, (err, devices) => {
      return err
@@ -54,7 +55,16 @@ app.get('/api/devices', (req, res) => {
     });
 });
 
-//login
+//display data
+app.get('/api/devices/data', (req, res) => {
+    Device.find({}, (err, devices) => {
+     return err
+       ? res.send(err)
+       : res.send(devices);
+    });
+});
+
+//login (Postman)
 app.post('/api/users/login', (req, res) => {
     const { username, password } = req.body;
 
