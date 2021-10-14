@@ -14,7 +14,7 @@ mongoose.connect('mongodb+srv://toanchungg:dunglinh19@cluster0.ag3kk.mongodb.net
 
 //Device defines a schema for the device model and the collection it is associated with
 const Device = require('./models/device'); 
-const User   = require('./models/user');
+// const User   = require('./models/user');
 const app = express();
 
 app.use(morgan('dev'))
@@ -32,12 +32,12 @@ app.get('/api/test', (req, res) => {
   res.send('The API is working!');
 });
 
+//add device 
 app.post('/api/devices', (req, res) => {
-    const { name, user, sensorData } = req.body;
+    const { name, user } = req.body;
     const newDevice = new Device({
       name,
-      user,
-      sensorData
+      user
     });
     newDevice.save(err => {
       return err
@@ -45,6 +45,7 @@ app.post('/api/devices', (req, res) => {
         : res.send('successfully added device and data');
     });
 });
+
 
 //device-list
 app.get('/api/devices', (req, res) => {
@@ -61,74 +62,6 @@ app.get('/api/devices/data', (req, res) => {
      return err
        ? res.send(err)
        : res.send(devices);
-    });
-});
-
-//login (Postman)
-app.post('/api/users/login', (req, res) => {
-    const { username, password } = req.body;
-
-    User.findOne({$or: [{email: username}, {phone: username}]})
-    .then(user => {
-        if(user){
-            bcrypt.compare(password, user.password, function(err, result) {
-                if(err) {
-                    res.json({
-                        error: err
-                    })
-                }
-                if(result) {
-                    let token = jwt.sign({email: user.email}, 'verySecretValue', {expiresIn: '1h'})
-                    res.json({
-                        message: 'Login successful!',
-                        token
-                    })
-                } 
-                else {
-                    res.json({
-                        message: 'Password does not correct'
-                    })
-                }
-            })
-        } 
-        else {
-            res.json({
-                message: 'No user found?!'
-            })
-        }
-    })
-})
-
-//sign up
-app.post('/api/users', (req, res) => {
-    const { email, phone, password } = req.body;
-
-    bcrypt.hash(password, 10, function(err, hashedPass) {
-        if(err) {
-            res.json({
-                error: err
-            })
-        }
-
-        const newUser = new User ({
-            email: email,
-            phone: phone,
-            password: hashedPass
-        })
-    
-        newUser.save(err => {
-            return err
-            ? res.send(err)
-            : res.send('successfully added user')
-        })
-    })
-})
-
-app.get('/api/users', (req, res) => {
-    User.find({}, (err, users) => {
-     return err
-       ? res.send(err)
-       : res.send(users);
     });
 });
 

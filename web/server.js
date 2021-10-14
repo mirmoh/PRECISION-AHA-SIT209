@@ -15,15 +15,7 @@ app.get('/', function (req, res) {
 app.get('/register', (req, res) => {
     res.sendFile(`${base}/register.html`);
   });
-  
-app.get('/signup', (req, res) => {
-    res.sendFile(`${base}/signup.html`);
-  }); 
-
-app.get('/login', (req, res) => {
-  res.sendFile(`${base}/login.html`);
-});
-
+   
 app.get('/device-data', (req, res) => {
   res.sendFile(`${base}/device-data.html`);
 });

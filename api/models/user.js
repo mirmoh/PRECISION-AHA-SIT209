@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 
-module.exports = mongoose.model('User', new mongoose.Schema({
-  id: String,
-  email: String,
-  phone: String,
-  password: String
-}, { collection : 'user209', timestamps: true }));
+// module.exports = mongoose.model('User', new mongoose.Schema({
+//   id: String,
+//   email: String,
+//   phone: String,
+//   password: String
+// }, { collection : 'user209', timestamps: true }));
 
 // const mongoose = require('mongoose')
 // const Schema = mongoose.Schema;

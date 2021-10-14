@@ -4,5 +4,6 @@ module.exports = mongoose.model('Device', new mongoose.Schema({
   id: String,
   name: String,
   user: String,
-  sensorData: Array
+  sensorData: Array,
+  password: String
 }, { collection : 'device209' }));

@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Status of the device</title>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js'></script>
+        
+    </head>
+    <body>
+        
+        <h1>Status of my device</h1>
+
+        <div id="sample"></div>
+        <button id="lightOn">Turn Sensor On</button>
+        <button id="lightOff">Turn Sensor Off</button>
+
+        <script>
+            
+        var socket = io();
+
+        socket.on('data', function(data) {
+            
+            console.log(data);
+            
+            document.getElementById('sample').innerHTML = data; 
+
+        });
+// on off button
+        document.getElementById('lightOn').onclick = function() {
+            
+            socket.emit('lights', { "status":"1" });
+                
+        };
+            
+        document.getElementById('lightOff').onclick = function(){
+               
+            socket.emit('lights', { "status":"0" });
+            
+        };
+        
+        </script>
+        
+    </body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "basic-socket",
+  "version": "0.0.1",
+  "description": "Communication between Arduino and HTML/JavaScript",
+  "dependencies": {
+    "nodemon": "^2.0.13",
+    "serialport": "^9.0.1",
+    "socket.io": "^2.0.4"
+  },
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

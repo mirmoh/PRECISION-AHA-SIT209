@@ -23,57 +23,14 @@ $.get(`${API_URL}/devices`)
 $('#add-device').on('click', () => {
   const name = $('#name').val();
   const user = $('#user').val();
-  const sensorData = [];
-
   const body = {
     name,
     user,
-    sensorData
   };
 
   $.post(`${API_URL}/devices`, body)
   .then(response => {
     location.href = '/';
-  })
-  .catch(error => {
-    console.error(`Error: ${error}`);
-  });
-});
-
-//sign in
-$('#add-user').on('click', () => {
-  const email    = $('#email').val();
-  const password = $('#pass').val();
-  const phone    = $('#phone').val();
-  
-  const body = {
-    email,
-    phone,
-    password
-  };
-
-  $.post(`${API_URL}/users`, body)
-  .then(response => {
-    location.href = '/login';
-  })
-  .catch(error => {
-    console.error(`Error: ${error}`);
-  });
-});
-
-//not working
-$('#login').on('click', () => {
-  const username  = $('#username').val();
-  const password  = $('#pass').val();
-  
-  const body = {
-    username,
-    password
-  };
-
-  $.post(`${API_URL}/users`, body)
-  .then(response => {
-    location.href = '/register';
   })
   .catch(error => {
     console.error(`Error: ${error}`);
