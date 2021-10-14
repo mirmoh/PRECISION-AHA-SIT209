@@ -73,12 +73,13 @@ async function getDevice() {
     });
     $('.editbtn').click(function(){
         $(this).html($(this).html() == 'enter' ? 'chosen' : 'enter');
-        $link.attr("href", "http://localhost:3000/"); // Sets the href attribute to a particular link.
-    });
+        location.href = "http://localhost:3000/";
+        // $link.attr("href", "http://localhost:3000/"); // Sets the href attribute to a particular link.
+      });
 
-    var $link = $("<a>sdkmsdkm </a>");                          // Creates the link element.
-// $("body").append($link); 
-})
+    // var $link = $("<a>sdkmsdkm </a>");                          // Creates the link element.
+    // $("body").append($link); 
+  })
   .catch(error => {
     console.error(`Error: ${error}`);
   });
