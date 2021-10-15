@@ -5,6 +5,7 @@ const mqtt              = require('mqtt');
 const express           = require('express');
 const bodyParser        = require('body-parser');
 const Device            = require('./models/device');
+const CDevice           = require('./models/cdevice');
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://toanchungg:dunglinh19@cluster0.ag3kk.mongodb.net/mydb0', 
@@ -30,6 +31,7 @@ const client = mqtt.connect("mqtt://broker.hivemq.com:1883");
 //subscribe the MQTT app to the /sensorData topic when the app connects to the broker
 client.on('connect', () => {
     client.subscribe('/sensorData');
+    client.subscribe('/chosenDevice');
     console.log('mqtt connected');
 })
 
@@ -71,6 +73,41 @@ app.put('/sensor-data', (req, res) => {
 
   const topic = `/sensorData`;
   const message = JSON.stringify({ deviceId, ts, loc, temp });
+
+  client.publish(topic, message, () => {
+    res.send('published new message');
+  });
+});
+
+//chosen device
+client.on('message', (topic, message) => {
+  if (topic == '/chosenDevice') {
+    const data = JSON.parse(message);
+    
+    CDevice.findOne({name: "a" }, (err, device) => {
+      if (err) {
+        console.log(err)
+      }
+        const { chosenDevice } = device;
+        const { name } = data;
+  
+        chosenDevice.push({ name });
+        device.chosenDevice = chosenDevice;
+
+        device.save(err => {
+          if (err) {
+            console.log(err)
+          }
+        });
+    });
+  }
+});
+
+app.post('/choose-device', (req, res) => {
+  const { name }  = req.body;
+
+  const topic = `/chosenDevice`;
+  const message = JSON.stringify({ name });
 
   client.publish(topic, message, () => {
     res.send('published new message');

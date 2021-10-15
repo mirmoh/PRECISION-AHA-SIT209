@@ -1,7 +1,9 @@
 $('#navbar').load('navbar.html');
 $('#footer').load('footer.html');
 
-const API_URL = 'http://localhost:5007/api';
+const API_URL  = 'http://localhost:5007/api';
+const MQTT_URL = 'http://localhost:5077/choose-device';
+
 
 chartIt();
 
@@ -37,29 +39,47 @@ async function chartIt() {
 
 //get data
 async function getData() {
-    getDevice();
+    listDevice();
     const xtimes = [];
     const ysoils = [];
+    const name = await getDevice();
 
     await $.get(`${API_URL}/devices/data`)
     .then(response => {
       response.forEach(device => {
+        if(device.name == name) {
           for(let i = 0, l = device.__v; i < l; i++) {
-                const d    = new Date();
-                const ts   = device.sensorData[i].ts;
-                d.setTime(ts);
-                xtimes.push(d.toLocaleString());
-                const soil = device.sensorData[i].temp;
-                ysoils.push(soil);    
-            }
+            const d    = new Date();
+            const ts   = device.sensorData[i].ts;
+            d.setTime(ts);
+            xtimes.push(d.toLocaleString());
+            const soil = device.sensorData[i].temp;
+            ysoils.push(soil);    
+          }
+        }
       });
     })
-
     return { xtimes, ysoils };
 }
 
-//display device
 async function getDevice() {
+  await chooseDevice()
+  const dname = [];
+
+  await $.get(`${API_URL}/chosen-device`)
+  .then(response => {
+    response.forEach(device => {
+      for(let i = 0, l = device.__v; i < l; i++) {
+        const soil = device.chosenDevice[i].name;
+        dname.push(soil);    
+      }
+    });
+  })
+  return dname[dname.length - 1];
+}
+
+//display device
+async function listDevice() {
   await $.get(`${API_URL}/devices`)
   .then(response => {
     response.forEach(device => {
@@ -73,14 +93,19 @@ async function getDevice() {
     });
     $('.editbtn').click(function(){
         $(this).html($(this).html() == 'enter' ? 'chosen' : 'enter');
-        location.href = "http://localhost:3000/";
-        // $link.attr("href", "http://localhost:3000/"); // Sets the href attribute to a particular link.
-      });
-
-    // var $link = $("<a>sdkmsdkm </a>");                          // Creates the link element.
-    // $("body").append($link); 
+    });
   })
   .catch(error => {
     console.error(`Error: ${error}`);
+  });
+}
+
+function chooseDevice() {
+  
+  $('#choose-device').on('click', function() {
+    const name = $('#name').val();
+
+    $.post(MQTT_URL, { name })
+    location.reload();
   });
 }
