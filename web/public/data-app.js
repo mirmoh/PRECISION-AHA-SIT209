@@ -93,6 +93,7 @@ async function listDevice() {
     });
     $('.editbtn').click(function(){
         $(this).html($(this).html() == 'enter' ? 'chosen' : 'enter');
+        location.href = 'http://localhost:3000/'
     });
   })
   .catch(error => {
