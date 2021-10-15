@@ -30,6 +30,24 @@ app.use(function(req, res, next) {
     next();
 });
 
+/**
+ * @api {post} /api/devices Add a new device to the array
+ * @apiGroup Device
+ * 
+ * @apiParam {String} [name]       Device's name
+ * @apiParam {String} [user]       User
+ * @apiParam {Object} [sensorData] Device's sensor data
+ * 
+ * @apiSuccessExample Success-Response:
+ * {
+ *  "Sucessfully added device and data"
+ * }
+ * 
+ * @apiErrorExample Error-Response:
+ * {
+ *  "Device already exist"
+ * }
+ */
 app.post('/api/devices', (req, res) => {
     const { name, user, sensorData } = req.body;
     const newDevice = new Device({
@@ -44,6 +62,22 @@ app.post('/api/devices', (req, res) => {
     });
 });
 
+/**
+ * @api {post} /api/chosen-devices Add a device name to the array for later searching
+ * @apiGroup CDevice
+ * 
+ * @apiParam {String} [name]       Device's name
+ * 
+ * @apiSuccessExample Success-Response:
+ * {
+ *  "Sucessfully added device and data"
+ * }
+ * 
+ * @apiErrorExample Error-Response:
+ * {
+ *  "Device already exist"
+ * }
+ */
 app.post('/api/chosen-devices', (req, res) => {
     const { name } = req.body;
 
@@ -64,7 +98,41 @@ app.post('/api/chosen-devices', (req, res) => {
       });
 });
 
-//device-list
+/**
+* @api {get} /api/devices An array of all devices
+* @apiGroup Device
+* @apiSuccessExample {json} Success-Response:
+*[
+*  {
+*    "_id": "614c9ea50ce45bd45a3e56be",
+*    "name": "laptop",
+*    "user": "hussain",
+*    "sensorData": [
+*      {
+*        "ts": 1632412759074,
+*       "loc": {
+*          "lat": "-18.39522",
+*          "lon": "-93.39309"
+*        },
+*        "temp": 49
+*      },
+*      {
+*        "ts": 1632412781149,
+*        "loc": {
+*          "lat": "35.0871",
+*          "lon": "-19.18277"
+*        },
+*        "temp": 43
+*      }
+*    ],
+*    "__v": 2
+*  }
+*]
+* @apiErrorExample {json} Error-Response:
+*  {
+*    "Device does not exist"
+*  }
+*/
 app.get('/api/devices', (req, res) => {
     Device.find({}, (err, devices) => {
      return err
@@ -73,7 +141,41 @@ app.get('/api/devices', (req, res) => {
     });
 });
 
-//get device data
+/**
+* @api {get} /api/devices/data An array of all devices for later data displaying
+* @apiGroup Device
+* @apiSuccessExample {json} Success-Response:
+*[
+*  {
+*    "_id": "614c9ea50ce45bd45a3e56be",
+*    "name": "laptop",
+*    "user": "hussain",
+*    "sensorData": [
+*      {
+*        "ts": 1632412759074,
+*       "loc": {
+*          "lat": "-18.39522",
+*          "lon": "-93.39309"
+*        },
+*        "temp": 49
+*      },
+*      {
+*        "ts": 1632412781149,
+*        "loc": {
+*          "lat": "35.0871",
+*          "lon": "-19.18277"
+*        },
+*        "temp": 43
+*      }
+*    ],
+*    "__v": 2
+*  }
+*]
+* @apiErrorExample {json} Error-Response:
+*  {
+*    "Device does not exist"
+*  }
+*/
 app.get('/api/devices/data', (req, res) => {
     Device.find({}, (err, devices) => {
      return err
@@ -82,6 +184,33 @@ app.get('/api/devices/data', (req, res) => {
     });
 });
 
+/**
+* @api {get} /api/chosen-device  An array of chosen devices' name
+* @apiGroup Device
+* @apiSuccessExample {json} Success-Response:
+*[
+*  {
+*    "_id": "6168c67eda19306355ae9cef",
+*    "name": "a",
+*    "chosenDevice": [
+*      {
+*        "name": "f"
+*      },
+*      {
+*        "name": "laptop"
+*      },
+*      {
+*       "name": "ll"
+*      }
+*    ],
+*    "__v": 3
+*  }
+*]
+* @apiErrorExample {json} Error-Response:
+*  {
+*    "Data does not exist"
+*  }
+*/
 app.get('/api/chosen-device', (req, res) => {
     CDevice.find({}, (err, devices) => {
      return err
@@ -90,125 +219,6 @@ app.get('/api/chosen-device', (req, res) => {
     });
 });
 
-//login (Postman)
-app.post('/api/users/login', (req, res) => {
-    const { username, password } = req.body;
-
-    User.findOne({$or: [{email: username}, {phone: username}]})
-    .then(user => {
-        if(user){
-            bcrypt.compare(password, user.password, function(err, result) {
-                if(err) {
-                    res.json({
-                        error: err
-                    })
-                }
-                if(result) {
-                    // let token = jwt.sign({email: user.email}, 'verySecretValue', {expiresIn: '1h'})
-                    res.json({
-                        message: 'Login successful!',
-                        // token
-                    })
-                } 
-                else {
-                    res.json({
-                        message: 'Password does not correct'
-                    })
-                }
-            })
-        } 
-        else {
-            res.json({
-                message: 'No user found?!'
-            })
-        }
-    })
-})
-
-//login web ()
-app.get('/api/users/login', (req, res) => {
-    const { username, password } = req.body;
-
-    User.findOne({$or: [{email: username}, {phone: username}]}, (err, user) => {
-        if(err) {
-            res.send(err)
-        }
-        if(user) {
-            bcrypt.compare(password, user.password, function(err, result) {
-                if(err) {
-                    return false
-                }
-                if(result) {
-                    return true
-                }
-            })
-        }
-    })
-    // .then(user => {
-    //     if(user){
-    //         bcrypt.compare(password, user.password, function(err, result) {
-    //             if(err) {
-    //                 res.json({
-    //                     error: err
-    //                 })
-    //             }
-    //             if(result) {
-    //                 // let token = jwt.sign({email: user.email}, 'verySecretValue', {expiresIn: '1h'})
-    //                 res.json({
-    //                     message: 'Login successful!',
-    //                     // token
-    //                 })
-    //             } 
-    //             else {
-    //                 res.json({
-    //                     message: 'Password does not correct'
-    //                 })
-    //             }
-    //         })
-    //     } 
-    //     else {
-    //         res.json({
-    //             message: 'No user found?!'
-    //         })
-    //     }
-    // })
-})
-
-//sign up
-app.post('/api/users', (req, res) => {
-    const { email, phone, password } = req.body;
-
-    bcrypt.hash(password, 10, function(err, hashedPass) {
-        if(err) {
-            res.json({
-                error: err
-            })
-        }
-
-        const newUser = new User ({
-            email: email,
-            phone: phone,
-            password: hashedPass
-        })
-    
-        newUser.save(err => {
-            return err
-            ? res.send(err)
-            : res.send('successfully added user')
-        })
-    })
-})
-
-app.get('/api/users', (req, res) => {
-    User.find({}, (err, users) => {
-     return err
-       ? res.send(err)
-       : res.send(users);
-    });
-});
-
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });
-
-// app.use('/api', authRoute);

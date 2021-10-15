@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "doc": "apidoc -o public/generated-docs/ -e node_modules/",
     "start": "nodemon api.js"
   },
   "author": "",
